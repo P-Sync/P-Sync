@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, hashlib, zlib, collections, argparse
+import os, hashlib, zlib, collections
 
 StagingEntry = collections.namedtuple('StagingEntry', [
     'ctime_s', 'ctime_n', 'mtime_s', 'mtime_n', 'dev', 'ino', 'mode',
@@ -11,6 +11,10 @@ StagingEntry = collections.namedtuple('StagingEntry', [
 def write_file(path, data):
     with open(path, 'wb') as f:
         f.write(data)
+
+def read_file(path):
+    with open(path, 'rb') as f:
+        return f.read()
 
 def init(repo):
     os.mkdir(repo)
@@ -102,5 +106,3 @@ def status():
         print('deleted files:')
         for path in deleted:
             print('   ', path)
-
-init(raw_input())
