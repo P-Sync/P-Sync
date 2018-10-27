@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, hashlib, zlib, collections
+import os, hashlib, zlib, collections, struct
 
 StagingEntry = collections.namedtuple('StagingEntry', [
     'ctime_s', 'ctime_n', 'mtime_s', 'mtime_n', 'dev', 'ino', 'mode',
