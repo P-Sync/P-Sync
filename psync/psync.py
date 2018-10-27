@@ -30,3 +30,15 @@ def init(repo):
     write_file(os.path.join(repo, '.psync', 'HEAD'),
                b'ref: refs/heads/master')
     print('initialized empty psync repository: {}'.format(repo))
+
+
+def hash_object(data, obj_type, write=True):
+    header = '{} {}'.format(obj_type, len(data)).encode()
+    full_data = header + b'\x00' + data
+    sha1 = hashlib.sha1(full_data).hexdigest()
+    if write:
+        path = os.path.join('.psync', 'objects', sha1[:2], sha1[2:])
+        if not os.path.exists(path):
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            write_file(path, zlib.compress(full_data))
+    return sha1
