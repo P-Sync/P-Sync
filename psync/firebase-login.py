@@ -1,6 +1,18 @@
 import pyrebase
 import webbrowser
 
+
+
+"""
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate('./serviceAccountKey.json')
+psync = firebase_admin.initialize_app(cred, name='P-Sync')
+
+db = firestore.client()
+"""
+
 config = {
   "apiKey": "AIzaSyB92upOPgf8HcF3QZ_xhz39cN3OsWKKBrs",
   "authDomain": "p-sync.firebaseapp.com",
