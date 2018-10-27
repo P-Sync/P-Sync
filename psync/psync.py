@@ -2,26 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os, hashlib, zlib
-import pyrebase
-import webbrowser
-
-config = {
-  "apiKey": "AIzaSyB92upOPgf8HcF3QZ_xhz39cN3OsWKKBrs",
-  "authDomain": "p-sync.firebaseapp.com",
-  "databaseURL": "https://psync-ufcg.firebaseio.com",
-  "storageBucket": "psync-ufcg.appspot.com",
-  "serviceAccount": "./serviceAccountKey.json"
-}
 
 StagingEntry = collections.namedtuple('StagingEntry', [
     'ctime_s', 'ctime_n', 'mtime_s', 'mtime_n', 'dev', 'ino', 'mode',
     'uid', 'gid', 'size', 'sha1', 'flags', 'path',
 ])
-
-firebase = pyrebase.initialize_app(config)
-
-auth = firebase.auth()
-webbrowser.open('https://github.com/login/oauth/authorize?client_id=1017b4f61c8abdd18c16', new=2)
 
 def write_file(path, data):
     with open(path, 'wb') as f:
@@ -101,19 +86,3 @@ def get_status():
                   entries_by_path[p].sha1.hex()}
     new = paths - entry_paths
     deleted = entry_paths - paths
-    return (sorted(changed), sorted(new), sorted(deleted))
-
-def status():
-    changed, new, deleted = get_status()
-    if changed:
-        print('changed files:')
-        for path in changed:
-            print('   ', path)
-    if new:
-        print('new files:')
-        for path in new:
-            print('   ', path)
-    if deleted:
-        print('deleted files:')
-        for path in deleted:
-            print('   ', path)
