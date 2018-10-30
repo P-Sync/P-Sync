@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, hashlib, zlib, collections, struct
+import os, hashlib, zlib, collections, struct, operator
 
 StagingEntry = collections.namedtuple('StagingEntry', [
     'ctime_s', 'ctime_n', 'mtime_s', 'mtime_n', 'dev', 'ino', 'mode',
@@ -106,3 +106,38 @@ def status():
         print('deleted files:')
         for path in deleted:
             print('   ', path)
+
+
+def write_index(entries):
+    packed_entries = []
+    for entry in entries:
+        entry_head = struct.pack('!LLLLLLLLLL20sH',
+                entry.ctime_s, entry.ctime_n, entry.mtime_s, entry.mtime_n,
+                entry.dev, entry.ino, entry.mode, entry.uid, entry.gid,
+                entry.size, entry.sha1, entry.flags)
+        path = entry.path.encode()
+        length = ((62 + len(path) + 8) // 8) * 8
+        packed_entry = entry_head + path + b'\x00' * (length - 62 - len(path))
+        packed_entries.append(packed_entry)
+    header = struct.pack('!4sLL', b'DIRC', 2, len(entries))
+    all_data = header + b''.join(packed_entries)
+    digest = hashlib.sha1(all_data).digest()
+    write_file(os.path.join('.psync', 'index'), all_data + digest)
+
+
+def add(paths):
+    paths = [p.replace('\\', '/') for p in paths]
+    all_entries = read_index()
+    entries = [e for e in all_entries if e.path not in paths]
+    for path in paths:
+        sha1 = hash_object(read_file(path), 'blob')
+        st = os.stat(path)
+        flags = len(path.encode())
+        assert flags < (1 << 12)
+        entry = StagingEntry(
+                int(st.st_ctime), 0, int(st.st_mtime), 0, st.st_dev,
+                st.st_ino, st.st_mode, st.st_uid, st.st_gid, st.st_size,
+                bytes.fromhex(sha1), flags, path)
+        entries.append(entry)
+    entries.sort(key=operator.attrgetter('path'))
+    write_index(entries)
