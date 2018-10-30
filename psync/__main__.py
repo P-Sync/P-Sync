@@ -15,6 +15,8 @@ def main():
             help='directory name for new repository')
     sub_parser = sub_parsers.add_parser('status',
             help='show the working status')
+    sub_parser = sub_parsers.add_parser('files',
+            help='list files in repository')
     
     args = parser.parse_args()
     
@@ -22,6 +24,8 @@ def main():
         psync.init(args.repo)
     elif args.command == 'status':
         psync.status()
+    elif args.command == 'files':
+        psync.list_files(details=args.stage)
     else:
         assert False, 'unexpected command {!r}'.format(args.command)
 if __name__ == '__main__':
