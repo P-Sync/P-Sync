@@ -7,7 +7,6 @@ setup(
     description='CLI para sincronização automática de arquivos e diretórios - Computação@UFCG',
     license='MIT',
     classifiers=[
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
     ],
     author='Héricles Emanuel',
