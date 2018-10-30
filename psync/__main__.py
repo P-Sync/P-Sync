@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import psync
+import psync, auth_handler
 import argparse
 
 def main():
@@ -24,7 +24,9 @@ def main():
             help='add file(s) to index')
     sub_parser.add_argument('paths', nargs='+', metavar='path',
             help='path(s) of files to add')
-                 
+    sub_parser = sub_parsers.add_parser('login',
+        help='login with your google account')
+
     args = parser.parse_args()
     
     if args.command == 'init':
@@ -35,6 +37,8 @@ def main():
         psync.list_files(details=args.stage)
     elif args.command == 'add':
         psync.add(args.paths)
+    elif args.command == 'login':
+        auth.login()
     else:
         assert False, 'unexpected command {!r}'.format(args.command)
 if __name__ == '__main__':

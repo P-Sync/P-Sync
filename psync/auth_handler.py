@@ -1,8 +1,6 @@
 import pyrebase
 import webbrowser
 
-
-
 """
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -21,7 +19,13 @@ config = {
   "serviceAccount": "./serviceAccountKey.json"
 }
 
-firebase = pyrebase.initialize_app(config)
+def init():
+  firebase = pyrebase.initialize_app(config)
 
-auth = firebase.auth()
-webbrowser.open('https://github.com/login/oauth/authorize?client_id=1017b4f61c8abdd18c16', new=2)
+def login():
+  
+  init()
+
+  auth = firebase.auth()
+  webbrowser.open('https://github.com/login/oauth/authorize?client_id=1017b4f61c8abdd18c16', new=2)
+
