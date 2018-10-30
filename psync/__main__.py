@@ -4,6 +4,7 @@
 import psync, auth_handler
 import argparse
 
+
 def main():
     parser = argparse.ArgumentParser()
     sub_parsers = parser.add_subparsers(dest='command', metavar='command')
@@ -41,5 +42,7 @@ def main():
         auth.login()
     else:
         assert False, 'unexpected command {!r}'.format(args.command)
+
+
 if __name__ == '__main__':
     main()

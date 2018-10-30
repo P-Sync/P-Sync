@@ -3,18 +3,22 @@
 
 import os, hashlib, zlib, collections, struct, operator
 
+
 StagingEntry = collections.namedtuple('StagingEntry', [
     'ctime_s', 'ctime_n', 'mtime_s', 'mtime_n', 'dev', 'ino', 'mode',
     'uid', 'gid', 'size', 'sha1', 'flags', 'path',
 ])
 
+
 def write_file(path, data):
     with open(path, 'wb') as f:
         f.write(data)
 
+
 def read_file(path):
     with open(path, 'rb') as f:
         return f.read()
+
 
 def init(repo):
     os.mkdir(repo)
@@ -36,6 +40,7 @@ def hash_object(data, obj_type, write=True):
             os.makedirs(os.path.dirname(path), exist_ok=True)
             write_file(path, zlib.compress(full_data))
     return sha1
+
 
 def read_index():
     try:
@@ -64,6 +69,7 @@ def read_index():
     assert len(entries) == num_entries
     return entries
 
+
 def list_files(details=False):
     for entry in read_index():
         if details:
@@ -72,6 +78,7 @@ def list_files(details=False):
                     entry.mode, entry.sha1.hex(), stage, entry.path))
         else:
             print(entry.path)
+
 
 def get_status():
     paths = set()
@@ -91,6 +98,7 @@ def get_status():
     new = paths - entry_paths
     deleted = entry_paths - paths
     return (sorted(changed), sorted(new), sorted(deleted))
+
 
 def status():
     changed, new, deleted = get_status()
