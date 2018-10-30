@@ -16,8 +16,11 @@ def main():
     sub_parser = sub_parsers.add_parser('status',
             help='show the working status')
     sub_parser = sub_parsers.add_parser('files',
-            help='list files in repository')
-    
+            help='list files in index')
+    sub_parser.add_argument('-s', '--stage', action='store_true',
+            help='show object details (mode, hash, and stage number) in '
+                 'addition to path')
+                 
     args = parser.parse_args()
     
     if args.command == 'init':

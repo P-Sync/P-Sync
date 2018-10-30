@@ -39,7 +39,7 @@ def hash_object(data, obj_type, write=True):
 
 def read_index():
     try:
-        data = read_file(os.path.join('.git', 'index'))
+        data = read_file(os.path.join('.psync', 'index'))
     except FileNotFoundError:
         return []
     digest = hashlib.sha1(data[:-20]).digest()
@@ -76,7 +76,7 @@ def list_files(details=False):
 def get_status():
     paths = set()
     for root, dirs, files in os.walk('.'):
-        dirs[:] = [d for d in dirs if d != '.git']
+        dirs[:] = [d for d in dirs if d != '.psync']
         for file in files:
             path = os.path.join(root, file)
             path = path.replace('\\', '/')
